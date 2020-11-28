@@ -56,7 +56,7 @@ module.exports = msgHandler = async (client, message) => {
                 Iv: '[❗] El enlace que enviaste no es válido!'
             }
         }
-        const apiKey = 'API-KEY' // apikey you can get it at https://mhankbarbar.herokuapp.com/api
+        const apiKey = '123' // apikey you can get it at https://mhankbarbar.herokuapp.com/api
         const time = moment(t * 1000).format('DD/MM HH:mm:ss')
         const botNumber = await client.getHostNumber()
         const blockNumber = await client.getBlockedIds()
@@ -206,7 +206,7 @@ module.exports = msgHandler = async (client, message) => {
             if (!isLin) return client.reply(from, mess.error.Iv, id)
             try {
                 client.reply(from, mess.wait, id)
-                const ytv = await get.get(`https://mhankbarbar.herokuapp.com/api/ytv?url=${args[1]}&apiKey=${apiKey}`).json()
+                const ytv = await get.get(`https://mhankbarbar.herokuapp.com/api/ytv?url=${args[1]}&123=${123}`).json()
                 if (ytv.error) {
                     client.reply(from, ytv.error, id)
                 } else {
