@@ -44,16 +44,16 @@ module.exports = msgHandler = async (client, message) => {
         }
 
         const mess = {
-            wait: '[ WAIT ] Sedang di proses⏳ silahkan tunggu sebentar',
+            wait: '[ ESPERE ] En proceso⏳ espere un momento',
             error: {
-                St: '[❗] Kirim gambar dengan caption *!sticker* atau tag gambar yang sudah dikirim',
-                Qm: '[❗] Terjadi kesalahan, mungkin themenya tidak tersedia!',
-                Yt3: '[❗] Terjadi kesalahan, tidak dapat meng konversi ke mp3!',
-                Yt4: '[❗] Terjadi kesalahan, mungkin error di sebabkan oleh sistem.',
-                Ig: '[❗] Terjadi kesalahan, mungkin karena akunnya private',
-                Ki: '[❗] Bot tidak bisa mengeluarkan admin group!',
-                Ad: '[❗] Tidak dapat menambahkan target, mungkin karena di private',
-                Iv: '[❗] Link yang anda kirim tidak valid!'
+                St: '[❗] Envíe la imagen con el título *!Sticker* o la etiqueta de imagen que se ha enviado',
+                Qm: '[❗] Ha ocurrido un error, quizás el tema no está disponible!',
+                Yt3: '[❗] Ocurrió un error, no se puede convertir a mp3!',
+                Yt4: '[❗] Ha ocurrido un error, tal vez el error sea causado por el sistema.',
+                Ig: '[❗] Ocurrió un error, tal vez porque la cuenta es privada',
+                Ki: '[❗] Los bots no pueden emitir administradores de grupo!',
+                Ad: '[❗] No se puede agregar el objetivo, tal vez porque es privado',
+                Iv: '[❗] El enlace que enviaste no es válido!'
             }
         }
         const apiKey = 'API-KEY' // apikey you can get it at https://mhankbarbar.herokuapp.com/api
@@ -64,7 +64,7 @@ module.exports = msgHandler = async (client, message) => {
         const groupAdmins = isGroupMsg ? await client.getGroupAdmins(groupId) : ''
         const isGroupAdmins = isGroupMsg ? groupAdmins.includes(sender.id) : false
         const isBotGroupAdmins = isGroupMsg ? groupAdmins.includes(botNumber + '@c.us') : false
-        const ownerNumber = ["628xxx@c.us","55xxxxx"] // replace with your whatsapp number
+        const ownerNumber = ["34605735266@c.us","55xxxxx"] // replace with your whatsapp number
         const isOwner = ownerNumber.includes(sender.id)
         const isBlocked = blockNumber.includes(sender.id)
         const isNsfw = isGroupMsg ? nsfw_.includes(chat.id) : false
@@ -105,7 +105,7 @@ module.exports = msgHandler = async (client, message) => {
             if (isMedia) {
                 if (mimetype === 'video/mp4' && message.duration < 10 || mimetype === 'image/gif' && message.duration < 10) {
                     const mediaData = await decryptMedia(message, uaOverride)
-                    client.reply(from, '[WAIT] Sedang di proses⏳ silahkan tunggu ± 1 min!', id)
+                    client.reply(from, '[ESPERE] En curso⏳ espere ± 1 min!', id)
                     const filename = `./media/aswu.${mimetype.split('/')[1]}`
                     await fs.writeFileSync(filename, mediaData)
                     await exec(`gify ${filename} ./media/output.gif --fps=30 --scale=240:240`, async function (error, stdout, stderr) {
@@ -113,7 +113,7 @@ module.exports = msgHandler = async (client, message) => {
                         await client.sendImageAsSticker(from, `data:image/gif;base64,${gif.toString('base64')}`)
                     })
                 } else (
-                    client.reply(from, '[❗] Kirim video dengan caption *!stickerGif* max 10 sec!', id)
+                    client.reply(from, '[❗] Envía un video con una leyenda *!stickerGif* max 10 sec!', id)
                 )
             }
             break
@@ -136,21 +136,21 @@ module.exports = msgHandler = async (client, message) => {
             break
         case '!donasi':
         case '!donate':
-            client.sendLinkWithAutoPreview(from, 'https://saweria.co/donate/mhankbarbar', donate)
+            client.sendLinkWithAutoPreview(from, 'https://pypal.me/lucasalchapar', donate)
             break
         case '!tts':
-            if (args.length === 1) return client.reply(from, 'Kirim perintah *!tts [id, en, jp, ar] [teks]*, contoh *!tts id halo semua*')
-            const ttsId = require('node-gtts')('id')
+            if (args.length === 1) return client.reply(from, 'Enviar pedidos *!tts [id, en, jp, ar] [teks]*, ejemplo *!tts id halo semua*')
+            const ttsId = require('node-gtts')('es')
             const ttsEn = require('node-gtts')('en')
 	    const ttsJp = require('node-gtts')('ja')
             const ttsAr = require('node-gtts')('ar')
             const dataText = body.slice(8)
             if (dataText === '') return client.reply(from, 'Baka?', id)
-            if (dataText.length > 500) return client.reply(from, 'Teks terlalu panjang!', id)
+            if (dataText.length > 500) return client.reply(from, 'El texto es demasiado largo!', id)
             var dataBhs = body.slice(5, 7)
-	        if (dataBhs == 'id') {
+	        if (dataBhs == 'es') {
                 ttsId.save('./media/tts/resId.mp3', dataText, function () {
-                    client.sendPtt(from, './media/tts/resId.mp3', id)
+                    client.sendPtt(from, './media/tts/resEs.mp3', id)
                 })
             } else if (dataBhs == 'en') {
                 ttsEn.save('./media/tts/resEn.mp3', dataText, function () {
@@ -165,11 +165,11 @@ module.exports = msgHandler = async (client, message) => {
                     client.sendPtt(from, './media/tts/resAr.mp3', id)
                 })
             } else {
-                client.reply(from, 'Masukkan data bahasa : [id] untuk indonesia, [en] untuk inggris, [jp] untuk jepang, dan [ar] untuk arab', id)
+                client.reply(from, 'Ingrese los datos del idioma: [es] para español, [en] para inglés, [jp] para japonés y [ar] para árabe', id)
             }
             break
         case '!nulis':
-            if (args.length === 1) return client.reply(from, 'Kirim perintah *!nulis [teks]*', id)
+            if (args.length === 1) return client.reply(from, 'Enviar pedidos *!nulis [texto]*', id)
             const nulis = encodeURIComponent(body.slice(7))
             client.reply(from, mess.wait, id)
             let urlnulis = `https://mhankbarbar.herokuapp.com/nulis?text=${nulis}&apiKey=${apiKey}`
@@ -180,18 +180,18 @@ module.exports = msgHandler = async (client, message) => {
             }).catch(e => client.reply(from, "Error: "+ e));
             break
         case '!ytmp3':
-            if (args.length === 1) return client.reply(from, 'Kirim perintah *!ytmp3 [linkYt]*, untuk contoh silahkan kirim perintah *!readme*')
+            if (args.length === 1) return client.reply(from, 'Enviar pedidos *!ytmp3 [linkYt]*, por ejemplo, envíe un pedido')
             let isLinks = args[1].match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/)
             if (!isLinks) return client.reply(from, mess.error.Iv, id)
             try {
-                client.reply(from, mess.wait, id)
+                client.reply(from, mess.espera, id)
                 const resp = await get.get(`https://mhankbarbar.herokuapp.com/api/yta?url=${args[1]}&apiKey=${apiKey}`).json()
                 if (resp.error) {
                     client.reply(from, resp.error, id)
                 } else {
                     const { title, thumb, filesize, result } = await resp
-                    if (Number(filesize.split(' MB')[0]) >= 30.00) return client.reply(from, 'Maaf durasi video sudah melebihi batas maksimal!', id)
-                    client.sendFileFromUrl(from, thumb, 'thumb.jpg', `➸ *Title* : ${title}\n➸ *Filesize* : ${filesize}\n\nSilahkan tunggu sebentar proses pengiriman file membutuhkan waktu beberapa menit.`, id)
+                    if (Number(filesize.split(' MB')[0]) >= 30.00) return client.reply(from, 'Lo sentimos, la duración del video superó el límite máximo!', id)
+                    client.sendFileFromUrl(from, thumb, 'thumb.jpg', `➸ *Title* : ${title}\n➸ *Filesize* : ${filesize}\n\nEspere un momento a que el proceso de envío del archivo tarde unos minutos.`, id)
                     await client.sendFileFromUrl(from, result, `${title}.mp3`, '', id).catch(() => client.reply(from, mess.error.Yt3, id))
                     //await client.sendAudio(from, result, id)
                 }
@@ -201,7 +201,7 @@ module.exports = msgHandler = async (client, message) => {
             }
             break
         case '!ytmp4':
-            if (args.length === 1) return client.reply(from, 'Kirim perintah *!ytmp4 [linkYt]*, untuk contoh silahkan kirim perintah *!readme*')
+            if (args.length === 1) return client.reply(from, 'Enviar pedidos *!ytmp4 [linkYt]*, por ejemplo, envíe un pedido')
             let isLin = args[1].match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/)
             if (!isLin) return client.reply(from, mess.error.Iv, id)
             try {
@@ -210,8 +210,8 @@ module.exports = msgHandler = async (client, message) => {
                 if (ytv.error) {
                     client.reply(from, ytv.error, id)
                 } else {
-                    if (Number(ytv.filesize.split(' MB')[0]) > 40.00) return client.reply(from, 'Maaf durasi video sudah melebihi batas maksimal!', id)
-                    client.sendFileFromUrl(from, ytv.thumb, 'thumb.jpg', `➸ *Title* : ${ytv.title}\n➸ *Filesize* : ${ytv.filesize}\n\nSilahkan tunggu sebentar proses pengiriman file membutuhkan waktu beberapa menit.`, id)
+                    if (Number(ytv.filesize.split(' MB')[0]) > 40.00) return client.reply(from, 'Lo sentimos, la duración del video superó el límite máximo!', id)
+                    client.sendFileFromUrl(from, ytv.thumb, 'thumb.jpg', `➸ *Title* : ${ytv.title}\n➸ *Filesize* : ${ytv.filesize}\n\nEspere un momento a que el proceso de envío del archivo tarde unos minutos.`, id)
                     await client.sendFileFromUrl(from, ytv.result, `${ytv.title}.mp4`, '', id).catch(() => client.reply(from, mess.error.Yt4, id))
                 }
             } catch (er) {
@@ -248,10 +248,10 @@ module.exports = msgHandler = async (client, message) => {
             client.sendFileFromUrl(from, epbe.result, 'epbe.mp4', epbe.title, id)
             break
         case '!creator':
-            client.sendContact(from, '6285892766102@c.us')
+            client.sendContact(from, '34605735266@c.us')
             break
         case '!ig':
-            if (args.length === 1) return client.reply(from, 'Kirim perintah *!ig [linkIg]* untuk contoh silahkan kirim perintah *!readme*')
+            if (args.length === 1) return client.reply(from, 'Enviar pedidos *!ig [linkIg]* por ejemplo, envíe un pedido')
             if (!args[1].match(isUrl) && !args[1].includes('instagram.com')) return client.reply(from, mess.error.Iv, id)
             try {
                 client.reply(from, mess.wait, id)
@@ -267,35 +267,35 @@ module.exports = msgHandler = async (client, message) => {
                 }
             break
         case '!nsfw':
-            if (!isGroupMsg) return client.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
-            if (!isGroupAdmins) return client.reply(from, 'Perintah ini hanya bisa di gunakan oleh Admin group!', id)
-            if (args.length === 1) return client.reply(from, 'Pilih enable atau disable!', id)
+            if (!isGroupMsg) return client.reply(from, 'Este comando solo se puede usar en grupos!', id)
+            if (!isGroupAdmins) return client.reply(from, 'Este comando solo puede ser utilizado por el grupo de administración!', id)
+            if (args.length === 1) return client.reply(from, 'Seleccione habilitar o deshabilitar!', id)
             if (args[1].toLowerCase() === 'enable') {
                 nsfw_.push(chat.id)
                 fs.writeFileSync('./lib/NSFW.json', JSON.stringify(nsfw_))
-                client.reply(from, 'NSWF Command berhasil di aktifkan di group ini! kirim perintah *!nsfwMenu* untuk mengetahui menu', id)
+                client.reply(from, 'El comando NSWF se ha activado con éxito en este grupo! enviar pedidos *!nsfwMenu* para conocer el menú', id)
             } else if (args[1].toLowerCase() === 'disable') {
                 nsfw_.splice(chat.id, 1)
                 fs.writeFileSync('./lib/NSFW.json', JSON.stringify(nsfw_))
-                client.reply(from, 'NSFW Command berhasil di nonaktifkan di group ini!', id)
+                client.reply(from, 'Comando NSFW desactivado con éxito en este grupo!', id)
             } else {
-                client.reply(from, 'Pilih enable atau disable udin!', id)
+                client.reply(from, 'Seleccione habilitar o deshabilitar!', id)
             }
             break
         case '!welcome':
-            if (!isGroupMsg) return client.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
-            if (!isGroupAdmins) return client.reply(from, 'Perintah ini hanya bisa di gunakan oleh Admin group!', id)
-            if (args.length === 1) return client.reply(from, 'Pilih enable atau disable!', id)
+            if (!isGroupMsg) return client.reply(from, 'Este comando solo se puede usar en grupos!', id)
+            if (!isGroupAdmins) return client.reply(from, 'Este comando solo puede ser utilizado por el grupo de administración!', id)
+            if (args.length === 1) return client.reply(from, 'Seleccione habilitar o deshabilitar!', id)
             if (args[1].toLowerCase() === 'enable') {
                 welkom.push(chat.id)
                 fs.writeFileSync('./lib/welcome.json', JSON.stringify(welkom))
-                client.reply(from, 'Fitur welcome berhasil di aktifkan di group ini!', id)
+                client.reply(from, 'La función de bienvenida se ha activado con éxito en este grupo.!', id)
             } else if (args[1].toLowerCase() === 'disable') {
                 welkom.splice(chat.id, 1)
                 fs.writeFileSync('./lib/welcome.json', JSON.stringify(welkom))
-                client.reply(from, 'Fitur welcome berhasil di nonaktifkan di group ini!', id)
+                client.reply(from, 'La función de bienvenida se ha desactivado con éxito en este grupo.!', id)
             } else {
-                client.reply(from, 'Pilih enable atau disable udin!', id)
+                client.reply(from, 'Seleccione habilitar o deshabilitar udin!', id)
             }
             break
         case '!nsfwmenu':
@@ -303,11 +303,11 @@ module.exports = msgHandler = async (client, message) => {
             client.reply(from, '1. !randomHentai\n2. !randomNsfwNeko', id)
             break
         case '!igstalk':
-            if (args.length === 1)  return client.reply(from, 'Kirim perintah *!igStalk @username*\nConntoh *!igStalk @duar_amjay*', id)
+            if (args.length === 1)  return client.reply(from, 'Enviar pedidos *!igStalk @username*\nejemplo *!igStalk @trapy_tomojado*', id)
             const stalk = await get.get(`https://mhankbarbar.herokuapp.com/api/stalk?username=${args[1]}&apiKey=${apiKey}`).json()
             if (stalk.error) return client.reply(from, stalk.error, id)
             const { Biodata, Jumlah_Followers, Jumlah_Following, Jumlah_Post, Name, Username, Profile_pic } = stalk
-            const caps = `➸ *Nama* : ${Name}\n➸ *Username* : ${Username}\n➸ *Jumlah Followers* : ${Jumlah_Followers}\n➸ *Jumlah Following* : ${Jumlah_Following}\n➸ *Jumlah Postingan* : ${Jumlah_Post}\n➸ *Biodata* : ${Biodata}`
+            const caps = `➸ *Nombre* : ${Name}\n➸ *Username* : ${Username}\n➸ *Cantidad de seguidores* : ${Jumlah_Followers}\n➸ *Total seguidos* : ${Jumlah_Following}\n➸ *Publicaciones* : ${Jumlah_Post}\n➸ *Biografia* : ${Biodata}`
             await client.sendFileFromUrl(from, Profile_pic, 'Profile.jpg', caps, id)
             break
         case '!infogempa':
@@ -317,10 +317,10 @@ module.exports = msgHandler = async (client, message) => {
             client.sendFileFromUrl(from, map, 'shakemap.jpg', hasil, id)
             break
         case '!anime':
-            if (args.length === 1) return client.reply(from, 'Kirim perintah *!anime [query]*\nContoh : *!anime darling in the franxx*', id)
+            if (args.length === 1) return client.reply(from, 'Enviar pedidos *!anime [consulta]*\nejemplo : *!anime darling in the franxx*', id)
             const animek = await get.get(`https://mhankbarbar.herokuapp.com/api/kuso?q=${body.slice(7)}&apiKey=${apiKey}`).json()
             if (animek.error) return client.reply(from, animek.error, id)
-            const res_animek = `Title: *${animek.title}*\n\n${animek.info}\n\nSinopsis: ${animek.sinopsis}\n\nLink Download:\n${animek.link_dl}`
+            const res_animek = `Titulo: *${animek.title}*\n\n${animek.info}\n\nSinopsis: ${animek.sinopsis}\n\nLink Download:\n${animek.link_dl}`
             client.sendFileFromUrl(from, animek.thumb, 'kusonime.jpg', res_animek, id)
             break
         case '!nh':
@@ -354,7 +354,7 @@ module.exports = msgHandler = async (client, message) => {
                             console.log('stdout : '+ stdout)*/
                             //})
                     } catch (err) {
-                        client.reply(from, '[❗] Terjadi kesalahan, mungkin kode nuklir salah', id)
+                        client.reply(from, '[❗] Algo salió mal, tal vez el código nuclear esté mal', id)
                     }
                 } else {
                     client.reply(from, '[❗] Kode nuClear Salah!')
@@ -409,7 +409,7 @@ module.exports = msgHandler = async (client, message) => {
                     const { is_adult, title, title_chinese, title_romaji, title_english, episode, similarity, filename, at, tokenthumb, anilist_id } = resolt.docs[0]
                     teks = ''
                     if (similarity < 0.92) {
-                    	teks = '*Saya memiliki keyakinan rendah dalam hal ini* :\n\n'
+                    	teks = '*Tengo poca fe en esto* :\n\n'
                     }
                     teks += `➸ *Title Japanese* : ${title}\n➸ *Title chinese* : ${title_chinese}\n➸ *Title Romaji* : ${title_romaji}\n➸ *Title English* : ${title_english}\n`
                     teks += `➸ *Ecchi* : ${is_adult}\n`
@@ -424,7 +424,7 @@ module.exports = msgHandler = async (client, message) => {
                     client.reply(from, 'Error !', id)
                 })
             } else {
-                client.sendFile(from, './media/img/tutod.jpg', 'Tutor.jpg', 'Neh contoh mhank!', id)
+                client.sendFile(from, './media/img/tutod.jpg', 'Tutor.jpg', 'Neh ejemplo mhank!', id)
             }
             break
         case '!quotemaker':
@@ -444,26 +444,26 @@ module.exports = msgHandler = async (client, message) => {
             }
             break
         case '!linkgroup':
-            if (!isBotGroupAdmins) return client.reply(from, 'Perintah ini hanya bisa di gunakan ketika bot menjadi admin', id)
+            if (!isBotGroupAdmins) return client.reply(from, 'Este comando solo se puede usar cuando el bot se convierte en administrador', id)
             if (isGroupMsg) {
                 const inviteLink = await client.getGroupInviteLink(groupId);
                 client.sendLinkWithAutoPreview(from, inviteLink, `\nLink group *${name}*`)
             } else {
-            	client.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
+            	client.reply(from, 'Este comando solo se puede usar en grupos!', id)
             }
             break
         case '!bc':
-            if (!isOwner) return client.reply(from, 'Perintah ini hanya untuk Owner bot!', id)
+            if (!isOwner) return client.reply(from, 'Este comando es solo para el dueño del bot!', id)
             let msg = body.slice(4)
             const chatz = await client.getAllChatIds()
             for (let ids of chatz) {
                 var cvk = await client.getChatById(ids)
-                if (!cvk.isReadOnly) await client.sendText(ids, `[ Shinomiya Kaguya BOT Broadcast ]\n\n${msg}`)
+                if (!cvk.isReadOnly) await client.sendText(ids, `[ NACO BOT Broadcast ]\n\n${msg}`)
             }
             client.reply(from, 'Broadcast Success!', id)
             break
         case '!adminlist':
-            if (!isGroupMsg) return client.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
+            if (!isGroupMsg) return client.reply(from, 'Este comando solo se puede usar en grupos!', id)
             let mimin = ''
             for (let admon of groupAdmins) {
                 mimin += `➸ @${admon.replace(/@c.us/g, '')}\n` 
@@ -471,31 +471,31 @@ module.exports = msgHandler = async (client, message) => {
             await client.sendTextWithMentions(from, mimin)
             break
         case '!ownergroup':
-            if (!isGroupMsg) return client.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
+            if (!isGroupMsg) return client.reply(from, 'Este comando solo se puede usar en grupos!', id)
             const Owner_ = chat.groupMetadata.owner
-            await client.sendTextWithMentions(from, `Owner Group : @${Owner_}`)
+            await client.sendTextWithMentions(from, `Propietario : @${Owner_}`)
             break
         case '!mentionall':
-            if (!isGroupMsg) return client.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
-            if (!isGroupAdmins) return client.reply(from, 'Perintah ini hanya bisa di gunakan oleh admin group', id)
+            if (!isGroupMsg) return client.reply(from, 'Este comando solo se puede usar en grupos!', id)
+            if (!isGroupAdmins) return client.reply(from, 'Este comando solo puede ser utilizado por administradores de grupo', id)
             const groupMem = await client.getGroupMembers(groupId)
-            let hehe = '╔══✪〘 Mention All 〙✪══\n'
+            let hehe = '╔══✪〘 TODOS 〙✪══\n'
             for (let i = 0; i < groupMem.length; i++) {
                 hehe += '╠➥'
                 hehe += ` @${groupMem[i].id.replace(/@c.us/g, '')}\n`
             }
-            hehe += '╚═〘 Shinomiya Kaguya BOT 〙'
+            hehe += '╚═〘 NACO BOT 〙'
             await client.sendTextWithMentions(from, hehe)
             break
         case '!kickall':
-            if (!isGroupMsg) return client.reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
+            if (!isGroupMsg) return client.reply(from, 'Este comando solo se puede usar en grupos!', id)
             const isGroupOwner = sender.id === chat.groupMetadata.owner
-            if (!isGroupOwner) return client.reply(from, 'Perintah ini hanya bisa di gunakan oleh Owner group', id)
-            if (!isBotGroupAdmins) return client.reply(from, 'Perintah ini hanya bisa di gunakan ketika bot menjadi admin', id)
+            if (!isGroupOwner) return client.reply(from, 'Este comando solo puede ser utilizado por el grupo Propietario', id)
+            if (!isBotGroupAdmins) return client.reply(from, 'Este comando solo se puede usar cuando el bot se convierte en administrador', id)
             const allMem = await client.getGroupMembers(groupId)
             for (let i = 0; i < allMem.length; i++) {
                 if (groupAdmins.includes(allMem[i].id)) {
-                    console.log('Upss this is Admin group')
+                    console.log('Upss, este es el administrador subnormal')
                 } else {
                     await client.removeParticipant(groupId, allMem[i].id)
                 }
@@ -503,17 +503,17 @@ module.exports = msgHandler = async (client, message) => {
             client.reply(from, 'Succes kick all member', id)
             break
         case '!leaveall':
-            if (!isOwner) return client.reply(from, 'Perintah ini hanya untuk Owner bot', id)
+            if (!isOwner) return client.reply(from, 'Este pedido es solo para propietarios del bot', id)
             const allChats = await client.getAllChatIds()
             const allGroups = await client.getAllGroups()
             for (let gclist of allGroups) {
-                await client.sendText(gclist.contact.id, `Maaf bot sedang pembersihan, total chat aktif : ${allChats.length}`)
+                await client.sendText(gclist.contact.id, `Lo siento, el bot está limpiando, el chat total está activo : ${allChats.length}`)
                 await client.leaveGroup(gclist.contact.id)
             }
             client.reply(from, 'Succes leave all group!', id)
             break
         case '!clearall':
-            if (!isOwner) return client.reply(from, 'Perintah ini hanya untuk Owner bot', id)
+            if (!isOwner) return client.reply(from, 'Este pedido es solo para propietarios del bot', id)
             const allChatz = await client.getAllChats()
             for (let dchat of allChatz) {
                 await client.deleteChat(dchat.id)
@@ -522,10 +522,10 @@ module.exports = msgHandler = async (client, message) => {
             break
         case '!add':
             const orang = args[1]
-            if (!isGroupMsg) return client.reply(from, 'Fitur ini hanya bisa di gunakan dalam group', id)
-            if (args.length === 1) return client.reply(from, 'Untuk menggunakan fitur ini, kirim perintah *!add* 628xxxxx', id)
-            if (!isGroupAdmins) return client.reply(from, 'Perintah ini hanya bisa di gunakan oleh admin group', id)
-            if (!isBotGroupAdmins) return client.reply(from, 'Perintah ini hanya bisa di gunakan ketika bot menjadi admin', id)
+            if (!isGroupMsg) return client.reply(from, 'Esta función solo se puede utilizar en grupos', id)
+            if (args.length === 1) return client.reply(from, 'Para utilizar esta función, envíe un comando *!add* 605xxxxx', id)
+            if (!isGroupAdmins) return client.reply(from, 'Este comando solo puede ser utilizado por administradores de grupo', id)
+            if (!isBotGroupAdmins) return client.reply(from, 'Este comando solo se puede usar cuando el bot se convierte en administrador', id)
             try {
                 await client.addParticipant(from,`${orang}@c.us`)
             } catch {
@@ -533,65 +533,65 @@ module.exports = msgHandler = async (client, message) => {
             }
             break
         case '!kick':
-            if (!isGroupMsg) return client.reply(from, 'Fitur ini hanya bisa di gunakan dalam group', id)
-            if (!isGroupAdmins) return client.reply(from, 'Perintah ini hanya bisa di gunakan oleh admin group', id)
-            if (!isBotGroupAdmins) return client.reply(from, 'Perintah ini hanya bisa di gunakan ketika bot menjadi admin', id)
-            if (mentionedJidList.length === 0) return client.reply(from, 'Untuk menggunakan Perintah ini, kirim perintah *!kick* @tagmember', id)
-            await client.sendText(from, `Perintah diterima, mengeluarkan:\n${mentionedJidList.join('\n')}`)
+            if (!isGroupMsg) return client.reply(from, 'Esta función solo se puede utilizar en grupos', id)
+            if (!isGroupAdmins) return client.reply(from, 'Este comando solo puede ser utilizado por administradores de grupo', id)
+            if (!isBotGroupAdmins) return client.reply(from, 'Este comando solo se puede usar cuando el bot se convierte en administrador', id)
+            if (mentionedJidList.length === 0) return client.reply(from, 'Para usar este comando, envíe un comando *!kick* @nombre', id)
+            await client.sendText(from, `Pedido recibido, emitido:\n${mentionedJidList.join('\n')}`)
             for (let i = 0; i < mentionedJidList.length; i++) {
                 if (groupAdmins.includes(mentionedJidList[i])) return client.reply(from, mess.error.Ki, id)
                 await client.removeParticipant(groupId, mentionedJidList[i])
             }
             break
         case '!leave':
-            if (!isGroupMsg) return client.reply(from, 'Perintah ini hanya bisa di gunakan dalam group', id)
-            if (!isGroupAdmins) return client.reply(from, 'Perintah ini hanya bisa di gunakan oleh admin group', id)
+            if (!isGroupMsg) return client.reply(from, 'Este comando solo se puede usar en grupos', id)
+            if (!isGroupAdmins) return client.reply(from, 'Este comando solo puede ser utilizado por administradores de grupo', id)
             await client.sendText(from,'Sayonara').then(() => client.leaveGroup(groupId))
             break
         case '!promote':
-            if (!isGroupMsg) return client.reply(from, 'Fitur ini hanya bisa di gunakan dalam group', id)
-            if (!isGroupAdmins) return client.reply(from, 'Fitur ini hanya bisa di gunakan oleh admin group', id)
-            if (!isBotGroupAdmins) return client.reply(from, 'Fitur ini hanya bisa di gunakan ketika bot menjadi admin', id)
-            if (mentionedJidList.length === 0) return client.reply(from, 'Untuk menggunakan fitur ini, kirim perintah *!promote* @tagmember', id)
-            if (mentionedJidList.length >= 2) return client.reply(from, 'Maaf, perintah ini hanya dapat digunakan kepada 1 user.', id)
-            if (groupAdmins.includes(mentionedJidList[0])) return client.reply(from, 'Maaf, user tersebut sudah menjadi admin.', id)
+            if (!isGroupMsg) return client.reply(from, 'Esta función solo se puede utilizar en grupos', id)
+            if (!isGroupAdmins) return client.reply(from, 'Esta función solo puede ser utilizada por administradores de grupo', id)
+            if (!isBotGroupAdmins) return client.reply(from, 'Esta función solo se puede utilizar cuando el bot es un administrador', id)
+            if (mentionedJidList.length === 0) return client.reply(from, 'Para utilizar esta función, envíe un comando *!promote* @nombre', id)
+            if (mentionedJidList.length >= 2) return client.reply(from, 'Lo sentimos, este comando solo se puede aplicar a 1 usuario.', id)
+            if (groupAdmins.includes(mentionedJidList[0])) return client.reply(from, 'Lo sentimos, el usuario ya es administrador.', id)
             await client.promoteParticipant(groupId, mentionedJidList[0])
-            await client.sendTextWithMentions(from, `Perintah diterima, menambahkan @${mentionedJidList[0]} sebagai admin.`)
+            await client.sendTextWithMentions(from, `Pedidos aceptados, agregados @${mentionedJidList[0]} como administrador.`)
             break
         case '!demote':
-            if (!isGroupMsg) return client.reply(from, 'Fitur ini hanya bisa di gunakan dalam group', id)
-            if (!isGroupAdmins) return client.reply(from, 'Fitur ini hanya bisa di gunakan oleh admin group', id)
-            if (!isBotGroupAdmins) return client.reply(from, 'Fitur ini hanya bisa di gunakan ketika bot menjadi admin', id)
-            if (mentionedJidList.length === 0) return client.reply(from, 'Untuk menggunakan fitur ini, kirim perintah *!demote* @tagadmin', id)
-            if (mentionedJidList.length >= 2) return client.reply(from, 'Maaf, perintah ini hanya dapat digunakan kepada 1 orang.', id)
-            if (!groupAdmins.includes(mentionedJidList[0])) return client.reply(from, 'Maaf, user tersebut tidak menjadi admin.', id)
+            if (!isGroupMsg) return client.reply(from, 'Esta función solo se puede utilizar en grupos', id)
+            if (!isGroupAdmins) return client.reply(from, 'Esta función solo puede ser utilizada por administradores de grupo', id)
+            if (!isBotGroupAdmins) return client.reply(from, 'Esta función solo se puede utilizar cuando el bot es un administrador', id)
+            if (mentionedJidList.length === 0) return client.reply(from, 'Para utilizar esta función, envíe un comando *!demote* @tagadmin', id)
+            if (mentionedJidList.length >= 2) return client.reply(from, 'Lo sentimos, este comando solo se puede aplicar a 1 persona.', id)
+            if (!groupAdmins.includes(mentionedJidList[0])) return client.reply(from, 'Lo sentimos, el usuario no es administrador.', id)
             await client.demoteParticipant(groupId, mentionedJidList[0])
-            await client.sendTextWithMentions(from, `Perintah diterima, menghapus jabatan @${mentionedJidList[0]}.`)
+            await client.sendTextWithMentions(from, `Pedido recibido, quitando posición @${mentionedJidList[0]}.`)
             break
         case '!join':
             //return client.reply(from, 'Jika ingin meng-invite bot ke group anda, silahkan izin ke wa.me/6285892766102', id)
-            if (args.length < 2) return client.reply(from, 'Kirim perintah *!join linkgroup key*\n\nEx:\n!join https://chat.whatsapp.com/blablablablablabla abcde\nuntuk key kamu bisa mendapatkannya hanya dengan donasi 5k', id)
+            if (args.length < 2) return client.reply(from, 'Enviar pedidos *!join linkgroup key*\n\nEx:\n!join https://chat.whatsapp.com/blablablablablabla abcde\npara obtener la llave, puede obtenerla con solo una donación de 1$', id)
             const link = args[1]
             const key = args[2]
             const tGr = await client.getAllGroups()
-            const minMem = 30
+            const minMem = 5
             const isLink = link.match(/(https:\/\/chat.whatsapp.com)/gi)
-            if (key !== 'lGjYt4zA5SQlTDx9z9Ca') return client.reply(from, '*key* salah! silahkan chat owner bot unruk mendapatkan key yang valid', id)
+            if (key !== 'lGjYt4zA5SQlTDx9z9Ca') return client.reply(from, '*key* incorrecto! Chatee con el propietario del bot para obtener una clave válida', id)
             const check = await client.inviteInfo(link)
-            if (!isLink) return client.reply(from, 'Ini link? 👊🤬', id)
-            if (tGr.length > 15) return client.reply(from, 'Maaf jumlah group sudah maksimal!', id)
-            if (check.size < minMem) return client.reply(from, 'Member group tidak melebihi 30, bot tidak bisa masuk', id)
+            if (!isLink) return client.reply(from, 'Aquí hay un enlace? 👊🤬', id)
+            if (tGr.length > 15) return client.reply(from, 'Lo sentimos, el número de grupos es máximo!', id)
+            if (check.size < minMem) return client.reply(from, 'Los miembros del grupo que no excedan los 5, los bots no pueden ingresar', id)
             if (check.status === 200) {
-                await client.joinGroupViaLink(link).then(() => client.reply(from, 'Bot akan segera masuk!'))
+                await client.joinGroupViaLink(link).then(() => client.reply(from, 'El bot entrará pronto!'))
             } else {
-                client.reply(from, 'Link group tidak valid!', id)
+                client.reply(from, 'Enlace de grupo no válido!', id)
             }
             break
         case '!delete':
-            if (!isGroupMsg) return client.reply(from, 'Fitur ini hanya bisa di gunakan dalam group', id)
-            if (!isGroupAdmins) return client.reply(from, 'Fitur ini hanya bisa di gunakan oleh admin group', id)
-            if (!quotedMsg) return client.reply(from, 'Salah!!, kirim perintah *!delete [tagpesanbot]*', id)
-            if (!quotedMsgObj.fromMe) return client.reply(from, 'Salah!!, Bot tidak bisa mengahpus chat user lain!', id)
+            if (!isGroupMsg) return client.reply(from, 'Esta función solo se puede utilizar en grupos', id)
+            if (!isGroupAdmins) return client.reply(from, 'Esta función solo puede ser utilizada por administradores de grupo', id)
+            if (!quotedMsg) return client.reply(from, 'Incorrecto !!, enviar pedidos *!delete [tagpesanbot]*', id)
+            if (!quotedMsgObj.fromMe) return client.reply(from, 'Incorrecto !!, los Bots no pueden borrar los chats de otros usuarios!', id)
             client.deleteMessage(quotedMsgObj.chatId, quotedMsgObj.id, false)
             break
         case '!getses':
@@ -599,7 +599,7 @@ module.exports = msgHandler = async (client, message) => {
             client.sendFile(from, sesPic, 'session.png', 'Neh...', id)
             break
         case '!lirik':
-            if (args.length == 1) return client.reply(from, 'Kirim perintah *!lirik [optional]*, contoh *!lirik aku bukan boneka*', id)
+            if (args.length == 1) return client.reply(from, 'Enviar pedidos *!lirik [musica]*, ejemplo *!lirik tusa*', id)
             const lagu = body.slice(7)
             const lirik = await liriklagu(lagu)
             client.reply(from, lirik, id)
@@ -616,7 +616,7 @@ module.exports = msgHandler = async (client, message) => {
             client.reply(from, listDaerah.result, id)
             break
         case '!listblock':
-            let hih = `This is list of blocked number\nTotal : ${blockNumber.length}\n`
+            let hih = `Esta es la lista de números bloqueados\nTotal : ${blockNumber.length}\n`
             for (let i of blockNumber) {
                 hih += `➸ @${i.replace(/@c.us/g,'')}\n`
             }
@@ -653,7 +653,7 @@ module.exports = msgHandler = async (client, message) => {
             client.sendFileFromUrl(from, loli.result, 'loli.jpeg', 'Lolinya om', id)
             break
         case '!waifu':
-            const waifu = await get.get(`https://mhankbarbar.herokuapp.com/api/waifu?apiKey=${apiKey}`).json()
+            const waifu = await get.get(`https://mhankbarbar.herokuapp.com/api/waifu`).json()
             client.sendFileFromUrl(from, waifu.image, 'Waifu.jpg', `➸ Name : ${waifu.name}\n➸ Description : ${waifu.desc}\n\n➸ Source : ${waifu.source}`, id)
             break
         case '!husbu':
@@ -665,7 +665,7 @@ module.exports = msgHandler = async (client, message) => {
             break
         case '!randomhentai':
             if (isGroupMsg) {
-                if (!isNsfw) return client.reply(from, 'Command/Perintah NSFW belum di aktifkan di group ini!', id)
+                if (!isNsfw) return client.reply(from, 'El comando / comando NSFW no se ha activado en este grupo!', id)
                 const hentai = await randomNimek('hentai')
                 if (hentai.endsWith('.png')) {
                     var ext = '.png'
@@ -685,7 +685,7 @@ module.exports = msgHandler = async (client, message) => {
             }
         case '!randomnsfwneko':
             if (isGroupMsg) {
-                if (!isNsfw) return client.reply(from, 'Command/Perintah NSFW belum di aktifkan di group ini!', id)
+                if (!isNsfw) return client.reply(from, 'El comando / comando NSFW no se ha activado en este grupo!', id)
                 const nsfwneko = await randomNimek('nsfw')
                 if (nsfwneko.endsWith('.png')) {
                     var ext = '.png'
@@ -746,7 +746,7 @@ module.exports = msgHandler = async (client, message) => {
         case '!url2img':
             const _query = body.slice(9)
             if (!_query.match(isUrl)) return client.reply(from, mess.error.Iv, id)
-            if (args.length === 1) return client.reply(from, 'Kirim perintah *!url2img [web]*\nContoh *!url2img https://google.com*', id)
+            if (args.length === 1) return client.reply(from, 'Enviar pedidos *!url2img [web]*\nejemplo *!url2img https://google.com*', id)
             const url2img = await get.get(`https://mhankbarbar.herokuapp.com/api/url2image?url=${_query}&apiKey=${apiKey}`).json()
             if (url2img.error) return client.reply(from, url2img.error, id)
             client.sendFileFromUrl(from, url2img.result, 'kyaa.jpg', null, id)
@@ -763,7 +763,7 @@ module.exports = msgHandler = async (client, message) => {
             break
         case '!meme':
             const response = await axios.get('https://meme-api.herokuapp.com/gimme/wholesomeanimemes');
-            const { postlink, title, subreddit, url, nsfw, spoiler } = response.data
+            const { meme, title, subreddit, url, nsfw, spoiler } = response.data
             client.sendFileFromUrl(from, `${url}`, 'meme.jpg', `${title}`)
             break
         case '!help':
