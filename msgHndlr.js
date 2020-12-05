@@ -594,6 +594,19 @@ module.exports = msgHandler = async (client, message) => {
             if (!quotedMsgObj.fromMe) return client.reply(from, 'Incorrecto !!, los Bots no pueden borrar los chats de otros usuarios!', id)
             client.deleteMessage(quotedMsgObj.chatId, quotedMsgObj.id, false)
             break
+		case '!mutegrup':
+	              if (!isGroupMsg) return client.reply(from, 'Esta función solo se puede utilizar en grupos', id)
+            if (!isGroupAdmins) return client.reply(from, 'Esta función solo puede ser utilizada por administradores de grupo', id)
+            if (!isBotGroupAdmins) return client.reply(from, 'Esta función solo se puede utilizar cuando el bot es un administrador', id)
+	              if (args.length === 1) return client.reply(from, 'Para cambiar la configuración del chat grupal para que solo el administrador pueda chatear\n\nUtilizar:\n!mutegrup on --activar\n!mutegrup off --apágalo', id)
+            if (args[1] == 'on') {
+	                      client.setGroupToAdminsOnly(groupId, true).then(() => client.sendText(from, 'Se modificó correctamente para que solo los administradores puedan chatear!'))
+		      } else if (args[1] == 'off') {
+			      client.setGroupToAdminsOnly(groupId, false).then(() => client.sendText(from, 'Se modificó correctamente para que todos los miembros puedan chatear.!'))
+		      } else {
+			      client.reply(from, '¡Órdenes incorrectas! por favor escriba !mutegrup para ver ejemplos', id)
+		      }
+		      break
         case '!getses':
             const sesPic = await client.getSnapshot()
             client.sendFile(from, sesPic, 'session.png', 'Neh...', id)
@@ -766,6 +779,30 @@ module.exports = msgHandler = async (client, message) => {
             const { meme , title, subreddit, url, meme dylantero, momos español } = response.data
             client.sendFileFromUrl(from, `${url}`, 'meme.jpg', `${title}`)
             break
+	        case '!nhentai':
+			if (args.length == 1) return client.reply(from, 'Usar !nhentai envíe el pedido de la siguiente manera!\n\n1. !nhentai id Query\nejemplo: !nhentai id naruto\n\n2. !nhentai dl Nuklir\ncontoh: !nhentai dl 171819', id)
+			if (args[1] == 'id') {
+				axios.get(`https://mhankbarbar.herokuapp.com/api/nhentai?tenvíe el pedido de la siguiente maneraype=search&query=${encodeURejemplonent(body.slice(9))}&apiKey=${apiKey}`)
+				.then(async (res) => {
+					if (res.data.error) return client.reply(from, res.data.error, id)
+					let hentaiId = 'Se encuentra la búsqueda de Nhentai!\n\n'
+					for (let i = 0; i < res.data.result.length; i++) {
+						hentaiId += `\n----------\nTítulo: ${res.data.result[i].title}\nIdioma: ${res.data.result[i].lang}\nNuclear: ${res.data.result[i].id}\n`
+					}
+					await client.sendFileFromUrl(from, res.data.result[0].cover, 'nhentaiId.jpg', hentaiId, id)
+				})
+				.catch((err) => console.log(err))
+			} else if (args[1] == 'dl') {
+				axios.get(`https://mhankbarbar.herokuapp.com/api/nhentai?type=download&nuklir=${args[2]}&apiKey=${apiKey}`)
+				.then(async (res) => {
+					if (res.data.error) return client.reply(from, res.data.error, id)
+					await client.sendFileFromUrl(from, res.data.thumb, 'nhentaiDL.jpg', `Datos encontrados!\n\nTitulo: ${res.data.title}\nArtist: ${res.data.artists}\nCategoria: ${res.data.categories}\nNuclear: ${res.data.id}\nIdioma: ${res.data.languages}\nTags: ${res.data.tags}\n\nEspera un momento, El archivo PDF se enviará inmediatamente!`, id)
+					await client.sendFileFromUrl(from, res.data.result, `${res.data.title}.pdf`, 'MhankBarBar NHentai', id)
+				})
+			} else {
+				client.reply(from, '¡Órdenes incorrectas! Escriba !nhentai para ver ejemplos')
+			} 
+			break
         case '!help':
             client.sendText(from, help)
             break
