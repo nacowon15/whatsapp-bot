@@ -757,7 +757,7 @@ module.exports = msgHandler = async (client, message) => {
             break
         case '!meme':
             const response = await axios.get('https://meme-api.herokuapp.com/gimme/wholesomeanimemes');
-            const { meme , title, subreddit, url, meme dylantero, momos español } = response.data
+            const { meme , title, subreddit, url, nsfw, spoiler } = response.data
             client.sendFileFromUrl(from, `${url}`, 'meme.jpg', `${title}`)
             break
 	        case '!nhentai':
