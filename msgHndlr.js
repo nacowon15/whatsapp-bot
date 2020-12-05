@@ -139,34 +139,15 @@ module.exports = msgHandler = async (client, message) => {
             client.sendLinkWithAutoPreview(from, 'https://pypal.me/lucasalchapar', donate)
             break
         case '!tts':
-            if (args.length === 1) return client.reply(from, 'Enviar pedidos *!tts [es, en, jp, ar] [teks]*, ejemplo *!tts en halo semua*')
-            const ttsId = require('node-gtts')('es')
-            const ttsEn = require('node-gtts')('en')
-	    const ttsJp = require('node-gtts')('ja')
-            const ttsAr = require('node-gtts')('ar')
-            const dataText = body.slice(8)
+            if (args.length === 1) return client.reply(from, 'Enviar pedidos *!tts [codigo del lenguaje] [frase]*, ejemplo *!tts id halo semua*')
+	    var dataBhs = body.slice(5, 7)		
+            const ttsWK = require('node-gtts')(dataBhs)
+          var dataText = body.slice(8)
             if (dataText === '') return client.reply(from, 'Baka?', id)
             if (dataText.length > 500) return client.reply(from, 'El texto es demasiado largo!', id)
-            var dataBhs = body.slice(5, 7)
-	        if (dataBhs == 'es') {
-                ttsId.save('./media/tts/resId.mp3', dataText, function () {
-                    client.sendPtt(from, './media/tts/resEs.mp3', id)
+ 		ttsWK.save('./media/tts/tts.mp3', dataText, function () {
+        	client.sendPtt(from, './media/tts/tts.mp3', id)
                 })
-            } else if (dataBhs == 'en') {
-                ttsEn.save('./media/tts/resEn.mp3', dataText, function () {
-                    client.sendPtt(from, './media/tts/resEn.mp3', id)
-                })
-            } else if (dataBhs == 'jp') {
-                ttsJp.save('./media/tts/resJp.mp3', dataText, function () {
-                    client.sendPtt(from, './media/tts/resJp.mp3', id)
-                })
-	    } else if (dataBhs == 'ar') {
-                ttsAr.save('./media/tts/resAr.mp3', dataText, function () {
-                    client.sendPtt(from, './media/tts/resAr.mp3', id)
-                })
-            } else {
-                client.reply(from, 'Ingrese los datos del idioma: [es] para español, [en] para inglés, [jp] para japonés y [ar] para árabe', id)
-            }
             break
         case '!nulis':
             if (args.length === 1) return client.reply(from, 'Enviar pedidos *!nulis [texto]*', id)
