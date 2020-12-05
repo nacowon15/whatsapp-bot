@@ -67,7 +67,7 @@ module.exports = msgHandler = async (client, message) => {
         const ownerNumber = ["34605735266@c.us","55xxxxx"] // replace with your whatsapp number
         const isOwner = ownerNumber.includes(sender.id)
         const isBlocked = blockNumber.includes(sender.id)
-        const isNsfw = isGroupMsg ? nsfw_.includes(chat.id) : false
+        const isNsfw = isGroupMsg ? nsfw_.includes(chat.id) : true
         const uaOverride = 'WhatsApp/2.2029.4 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
         const isUrl = new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/gi)
         if (!isGroupMsg && command.startsWith('!')) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mEXEC\x1b[1;37m]', time, color(msgs(command)), 'from', color(pushname))
@@ -139,7 +139,7 @@ module.exports = msgHandler = async (client, message) => {
             client.sendLinkWithAutoPreview(from, 'https://pypal.me/lucasalchapar', donate)
             break
         case '!tts':
-            if (args.length === 1) return client.reply(from, 'Enviar pedidos *!tts [id, en, jp, ar] [teks]*, ejemplo *!tts id halo semua*')
+            if (args.length === 1) return client.reply(from, 'Enviar pedidos *!tts [es, en, jp, ar] [teks]*, ejemplo *!tts en halo semua*')
             const ttsId = require('node-gtts')('es')
             const ttsEn = require('node-gtts')('en')
 	    const ttsJp = require('node-gtts')('ja')
@@ -172,7 +172,7 @@ module.exports = msgHandler = async (client, message) => {
             if (args.length === 1) return client.reply(from, 'Enviar pedidos *!nulis [texto]*', id)
             const nulis = encodeURIComponent(body.slice(7))
             client.reply(from, mess.wait, id)
-            let urlnulis = `https://mhankbarbar.herokuapp.com/nulis?text=${nulis}&apiKey=${apiKey}`
+            let urlnulis = `https://mhankbarbar.herokuapp.com/nulis?text=${nulis}&apiKey=${123}`
             await fetch(urlnulis, {method: "GET"})
             .then(res => res.json())
             .then(async (json) => {
@@ -185,7 +185,7 @@ module.exports = msgHandler = async (client, message) => {
             if (!isLinks) return client.reply(from, mess.error.Iv, id)
             try {
                 client.reply(from, mess.espera, id)
-                const resp = await get.get(`https://mhankbarbar.herokuapp.com/api/yta?url=${args[1]}&apiKey=${apiKey}`).json()
+                const resp = await get.get(`https://mhankbarbar.herokuapp.com/api/yta?url=${args[1]}&apiKey=${123}`).json()
                 if (resp.error) {
                     client.reply(from, resp.error, id)
                 } else {
@@ -672,7 +672,7 @@ module.exports = msgHandler = async (client, message) => {
                 } else {
                     var ext = '.jpg'
                 }
-                client.sendFileFromUrl(from, hentai, `Hentai${ext}`, 'Hentai!', id)
+                client.sendFileFromUrl(from, hentai, `Hentai`, 'Hentai!', id)
                 break
             } else {
                 const hentai = await randomNimek('hentai')
@@ -681,7 +681,7 @@ module.exports = msgHandler = async (client, message) => {
                 } else {
                     var ext = '.jpg'
                 }
-                client.sendFileFromUrl(from, hentai, `Hentai${ext}`, 'Hentai!', id)
+                client.sendFileFromUrl(from, hentai, `Hentai`, 'Hentai!', id)
             }
         case '!randomnsfwneko':
             if (isGroupMsg) {
@@ -763,7 +763,7 @@ module.exports = msgHandler = async (client, message) => {
             break
         case '!meme':
             const response = await axios.get('https://meme-api.herokuapp.com/gimme/wholesomeanimemes');
-            const { meme, title, subreddit, url, nsfw, spoiler } = response.data
+            const { meme , title, subreddit, url, meme dylantero, momos español } = response.data
             client.sendFileFromUrl(from, `${url}`, 'meme.jpg', `${title}`)
             break
         case '!help':
