@@ -134,12 +134,23 @@ module.exports = msgHandler = async (client, message) => {
                 }
             }
             break
+        case '!stickertoimg':
+	case '!stikertoimg':
+	case '!toimg':
+	    if (args.length === 2) return client.reply(from, 'Responde a la pegatina que quieres convertir en imagen con el comando\n *!toimg*', id)
+            if (quotedMsg && quotedMsg.type == 'sticker') {
+                const mediaData = await decryptMedia(quotedMsg)
+                client.reply(from, '[ESPERA] En curso⏳ espere!', id)
+                const imageBase64 = `data:${quotedMsg.mimetype};base64,${mediaData.toString('base64')}`
+                await client.sendFile(from, imageBase64, 'imagesticker.jpg', 'Convertir pegatinas en imágenes con éxito!', id)
+            } else if (!quotedMsg) return client.reply(from, 'Etiqueta la pegatina que quieras usar como imagen!', id)
+            break
         case '!donasi':
         case '!donate':
             client.sendLinkWithAutoPreview(from, 'https://pypal.me/lucasalchapar', donate)
             break
         case '!tts':
-            if (args.length === 1) return client.reply(from, 'Enviar pedidos *!tts [codigo del lenguaje] [frase]*, ejemplo *!tts id halo semua*')
+            if (args.length === 1) return client.reply(from, 'Enviar pedidos *!tts [codigo del lenguaje] [frase]*, ejemplo *!tts es Airam Maricon*')
 	    var dataBhs = body.slice(5, 7)		
             const ttsWK = require('node-gtts')(dataBhs)
           var dataText = body.slice(8)
