@@ -771,7 +771,7 @@ module.exports = msgHandler = async (client, message) => {
             const { meme , title, subreddit, url, nsfw, spoiler } = response.data
             client.sendFileFromUrl(from, `${url}`, 'meme.jpg', `${title}`)
             break
-	        case '!nhentai':
+	case '!nhentai':
 			if (args.length == 1) return client.reply(from, 'Usar !nhentai envíe el pedido de la siguiente manera!\n\n1. !nhentai id Query\nejemplo: !nhentai id naruto\n\n2. !nhentai dl Nuklir\ncontoh: !nhentai dl 171819', id)
 			if (args[1] == 'id') {
 				axios.get(`https://mhankbarbar.herokuapp.com/api/nhentai?tenvíe el pedido de la siguiente maneraype=search&query=${encodeURejemplonent(body.slice(9))}&apiKey=${apiKey}`)
