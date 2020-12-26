@@ -171,45 +171,31 @@ module.exports = msgHandler = async (client, message) => {
                 await client.sendFileFromUrl(from, json.result, 'Nulis.jpg', 'Nih anjim', id)
             }).catch(e => client.reply(from, "Error: "+ e));
             break
-        case '!ytmp3':
-            if (args.length === 1) return client.reply(from, 'Enviar pedidos *!ytmp3 [linkYt]*, por ejemplo, envíe un pedido')
-            let isLinks = args[1].match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/)
-            if (!isLinks) return client.reply(from, mess.error.Iv, id)
-            try {
-                client.reply(from, mess.espera, id)
-                const resp = await get.get(`https://mhankbarbar.herokuapp.com/api/yta?url=${args[1]}&apiKey=${123}`).json()
-                if (resp.error) {
-                    client.reply(from, resp.error, id)
-                } else {
-                    const { title, thumb, filesize, result } = await resp
-                    if (Number(filesize.split(' MB')[0]) >= 30.00) return client.reply(from, 'Lo sentimos, la duración del video superó el límite máximo!', id)
-                    client.sendFileFromUrl(from, thumb, 'thumb.jpg', `➸ *Title* : ${title}\n➸ *Filesize* : ${filesize}\n\nEspere un momento a que el proceso de envío del archivo tarde unos minutos.`, id)
-                    await client.sendFileFromUrl(from, result, `${title}.mp3`, '', id).catch(() => client.reply(from, mess.error.Yt3, id))
-                    //await client.sendAudio(from, result, id)
-                }
-            } catch (err) {
-                client.sendText(ownerNumber[0], 'Error ytmp3 : '+ err)
-                client.reply(from, mess.error.Yt3, id)
-            }
+        case 'ytmp3':
+            if (args.length == 0) return aruga.reply(from, `Para descargar canciones de youtube\ntipo: ${prefix}ytmp3 [link_yt]`, id)
+            const linkmp3 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
+			rugaapi.ytmp3(`https://youtu.be/${linkmp3}`)
+            .then(async(res) => {
+				if (res.error) return aruga.sendFileFromUrl(from, `${res.url}`, '', `${res.error}`)
+				await aruga.sendFileFromUrl(from, `${res.result.thumb}`, '', `Canción encontrada\n\nTítulo: ${res.result.title}\nDesc: ${res.result.desc}\nPaciencia nuevamente enviada`, id)
+				await aruga.sendFileFromUrl(from, `${res.result.url}`, '', '', id)
+				.catch(() => {
+					aruga.reply(from, `URL Ini ${args[0]} Se ha descargado antes. La URL se restablecerá después de 1 hora/60 Minutos`, id)
+				})
+			})
             break
-        case '!ytmp4':
-            if (args.length === 1) return client.reply(from, 'Enviar pedidos *!ytmp4 [linkYt]*, por ejemplo, envíe un pedido')
-            let isLin = args[1].match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/)
-            if (!isLin) return client.reply(from, mess.error.Iv, id)
-            try {
-                client.reply(from, mess.wait, id)
-                const ytv = await get.get(`https://mhankbarbar.herokuapp.com/api/ytv?url=${args[1]}&123=${123}`).json()
-                if (ytv.error) {
-                    client.reply(from, ytv.error, id)
-                } else {
-                    if (Number(ytv.filesize.split(' MB')[0]) > 40.00) return client.reply(from, 'Lo sentimos, la duración del video superó el límite máximo!', id)
-                    client.sendFileFromUrl(from, ytv.thumb, 'thumb.jpg', `➸ *Title* : ${ytv.title}\n➸ *Filesize* : ${ytv.filesize}\n\nEspere un momento a que el proceso de envío del archivo tarde unos minutos.`, id)
-                    await client.sendFileFromUrl(from, ytv.result, `${ytv.title}.mp4`, '', id).catch(() => client.reply(from, mess.error.Yt4, id))
-                }
-            } catch (er) {
-                client.sendText(ownerNumber[0], 'Error ytmp4 : '+ er)
-                client.reply(from, mess.error.Yt4, id)
-            }
+        case 'ytmp4':
+            if (args.length == 0) return aruga.reply(from, `Para descargar videos de youtube\ntipo: ${prefix}ytmp3 [link_yt]`, id)
+            const linkmp4 = args[0].replace('https://youtu.be/','').replace('https://www.youtube.com/watch?v=','')
+			rugaapi.ytmp4(`https://youtu.be/${linkmp4}`)
+            .then(async(res) => {
+				if (res.error) return aruga.sendFileFromUrl(from, `${res.url}`, '', `${res.error}`)
+				await aruga.sendFileFromUrl(from, `${res.result.thumb}`, '', `Video encontrada\n\nTítulo: ${res.result.title}\nDesc: ${res.result.desc}\nPaciencia nuevamente enviada`, id)
+				await aruga.sendFileFromUrl(from, `${res.result.url}`, '', '', id)
+				.catch(() => {
+					aruga.reply(from, `URL Ini ${args[0]} Se ha descargado antes. La URL se restablecerá después de 1 hora/60 Minutos`, id)
+				})
+			})
             break
         case '!wiki':
             if (args.length === 1) return client.reply(from, 'Kirim perintah *!wiki [query]*\nContoh : *!wiki asu*', id)
@@ -231,14 +217,22 @@ module.exports = msgHandler = async (client, message) => {
                 client.reply(from, `➸ Tempat : ${weather.result.tempat}\n\n➸ Angin : ${weather.result.angin}\n➸ Cuaca : ${weather.result.cuaca}\n➸ Deskripsi : ${weather.result.desk}\n➸ Kelembapan : ${weather.result.kelembapan}\n➸ Suhu : ${weather.result.suhu}\n➸ Udara : ${weather.result.udara}`, id)
             }
             break
-        case '!fb':
-            if (args.length === 1) return client.reply(from, 'Kirim perintah *!fb [linkFb]* untuk contoh silahkan kirim perintah *!readme*', id)
-            if (!args[1].includes('facebook.com')) return client.reply(from, mess.error.Iv, id)
-            client.reply(from, mess.wait, id)
-            const epbe = await get.get(`https://mhankbarbar.herokuapp.com/api/epbe?url=${args[1]}&apiKey=${apiKey}`).json()
-            if (epbe.error) return client.reply(from, epbe.error, id)
-            client.sendFileFromUrl(from, epbe.result, 'epbe.mp4', epbe.title, id)
-            break
+		case 'fb':
+		case 'facebook':
+			if (args.length == 0) return aruga.reply(from, `Para descargar videos desde el enlace de Facebook\ntipo: ${prefix}fb [link_fb]`, id)
+			rugaapi.fb(args[0])
+			.then(async (res) => {
+				const { link, linkhd, linksd } = res
+				if (res.status == 'error') return aruga.sendFileFromUrl(from, link, '', 'Lo siento, no se pudo encontrar tu URL', id)
+				await aruga.sendFileFromUrl(from, linkhd, '', 'Aqui esta el video', id)
+				.catch(async () => {
+					await aruga.sendFileFromUrl(from, linksd, '', 'Aqui esta el video', id)
+					.catch(() => {
+						aruga.reply(from, 'Lo siento, no se pudo encontrar tu URL', id)
+					})
+				})
+			})
+			break
         case '!creator':
             client.sendContact(from, '34605735266@c.us')
             break
@@ -418,6 +412,60 @@ module.exports = msgHandler = async (client, message) => {
             } else {
                 client.sendFile(from, './media/img/tutod.jpg', 'Tutor.jpg', 'Neh ejemplo mhank!', id)
             }
+            break
+	case 'anime':
+            if (args.length == 0) return aruga.reply(from, `Usar ${prefix}anime\nPor favor escribe: ${prefix}anime [consulta]\nEjemplo: ${prefix}anime random\n\nconsulta que están disponibles:\nrandom, waifu, husbu, neko`, id)
+            if (args[0] == 'random' || args[0] == 'waifu' || args[0] == 'husbu' || args[0] == 'neko') {
+                fetch('https://raw.githubusercontent.com/ArugaZ/grabbed-results/main/random/anime/' + args[0] + '.txt')
+                .then(res => res.text())
+                .then(body => {
+                    let randomnime = body.split('\n')
+                    let randomnimex = randomnime[Math.floor(Math.random() * randomnime.length)]
+                    aruga.sendFileFromUrl(from, randomnimex, '', 'Nee..', id)
+                })
+                .catch(() => {
+                    aruga.reply(from, 'Hay un Error!', id)
+                })
+            } else {
+                aruga.reply(from, `Lo sentimos, la consulta no está disponible. Por favor escribe ${prefix}anime para ver la lista de consultas`)
+            }
+            break
+	case 'images':
+            if (args.length == 0) return aruga.reply(from, `Para buscar imágenes de pinterest\ntipo: ${prefix}images [busca]\nejemplo: ${prefix}images naruto`, id)
+            const cariwall = body.slice(8)
+            const hasilwall = await images.fdci(cariwall)
+            await aruga.sendFileFromUrl(from, hasilwall, '', '', id)
+            .catch(() => {
+                aruga.reply(from, 'Hay un Error!', id)
+            })
+            break
+        case 'stalkig':
+            if (args.length == 0) return aruga.reply(from, `Acechar la cuenta de Instagram de alguien\ntipo ${prefix}stalkig [nombre]\nejemplo: ${prefix}stalkig trapy_tomojado`, id)
+            const igstalk = await rugaapi.stalkig(args[0])
+            const igstalkpict = await rugaapi.stalkigpict(args[0])
+            await aruga.sendFileFromUrl(from, igstalkpict, '', igstalk, id)
+            .catch(() => {
+                aruga.reply(from, 'Hay un Error!', id)
+            })
+            break
+        case 'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
+            if (args.length == 0) return aruga.reply(from, `Para buscar canciones de youtube\n\nUtilizar: ${prefix}play numb`, id)
+            axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
+            .then(async (res) => {
+                await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `Canción encontrada\n\nTítulo: ${res.data[0].title}\nDuración: ${res.data[0].duration}segundo\nSubido: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\nestá siendo enviado`, id)
+				rugaapi.ytmp3(`https://youtu.be/${res.data[0].id}`)
+				.then(async(res) => {
+					if (res.status == 'error') return aruga.sendFileFromUrl(from, `${res.link}`, '', `${res.error}`)
+					await aruga.sendFileFromUrl(from, `${res.thumb}`, '', `Canción encontrada\n\nTítulo ${res.title}\n\nPaciencia nuevamente enviada`, id)
+					await aruga.sendFileFromUrl(from, `${res.link}`, '', '', id)
+					.catch(() => {
+						aruga.reply(from, `URL Ini ${args[0]} Se ha descargado antes. La URL se restablecerá después de 1 hora/60 minutos.`, id)
+					})
+				})
+            })
+            .catch(() => {
+                aruga.reply(from, 'Hay un Error!', id)
+            })
             break
         case '!quotemaker':
             arg = body.trim().split('|')
@@ -599,6 +647,27 @@ module.exports = msgHandler = async (client, message) => {
 			      client.reply(from, '¡Órdenes incorrectas! por favor escriba !mutegrup para ver ejemplos', id)
 		      }
 		      break
+        case 'ban':
+            if (!isOwnerBot) return aruga.reply(from, 'este comando solo es para el dueño!', id)
+            if (args.length == 0) return aruga.reply(from, `Prohibir que alguien use comandos\n\nCómo escribir: \n${prefix}ban add 628xx --Activar\n${prefix}ban del 628xx --deshabilitar\n\ncómo prohibir rápidamente muchos tipos de grupos:\n${prefix}ban @tag @tag @tag`, id)
+            if (args[0] == 'add') {
+                banned.push(args[1]+'@c.us')
+                fs.writeFileSync('./settings/banned.json', JSON.stringify(banned))
+                aruga.reply(from, 'Objetivo prohibido con éxito!')
+            } else
+            if (args[0] == 'del') {
+                let xnxx = banned.indexOf(args[1]+'@c.us')
+                banned.splice(xnxx,1)
+                fs.writeFileSync('./settings/banned.json', JSON.stringify(banned))
+                aruga.reply(from, 'Objetivo no prohibido con éxito!')
+            } else {
+             for (let i = 0; i < mentionedJidList.length; i++) {
+                banned.push(mentionedJidList[i])
+                fs.writeFileSync('./settings/banned.json', JSON.stringify(banned))
+                aruga.reply(from, 'Objetivo de prohibición de éxito!', id)
+                }
+            }
+            break
         case '!getses':
             const sesPic = await client.getSnapshot()
             client.sendFile(from, sesPic, 'session.png', 'Neh...', id)
